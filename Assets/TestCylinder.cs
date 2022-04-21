@@ -22,7 +22,7 @@ public class TestCylinder : MonoBehaviour
     {
         
 
-        //transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
+        transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
 
         if (Time.time > next_time)
         {

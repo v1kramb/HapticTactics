@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class CreateWall : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class CreateWall : MonoBehaviour
     //public Color finalColor;
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         // create color increment for RGB
         //float rDiff = (finalColor.r - initialColor.r) / depth;
@@ -51,20 +52,12 @@ public class CreateWall : MonoBehaviour
         plane.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, planeZ);
 
         // add components programmatically
-        //plane.AddComponent<Rigidbody>();
+        // plane.AddComponent<Rigidbody>();
         //plane.GetComponent<Rigidbody>().useGravity = false;
-        //plane.GetComponent<Rigidbody>().isKinematic = true;
+        // plane.GetComponent<Rigidbody>().isKinematic = true;
 
-        plane.AddComponent<MeshFilter>();
-        
-        plane.AddComponent<MeshRenderer>();
-        plane.GetComponent<MeshRenderer>().material.SetColor("_Color", planeColor);
-
-        plane.AddComponent<MeshCollider>();
-
-        plane.AddComponent<CreateHole>();
-        
         // create custom mesh filter
+        plane.AddComponent<MeshFilter>();
         plane.GetComponent<MeshFilter>().mesh = new Mesh();
         plane.GetComponent<MeshFilter>().mesh.name = "Plane Mesh " + index;
 
@@ -95,5 +88,12 @@ public class CreateWall : MonoBehaviour
             }
         }
         plane.GetComponent<MeshFilter>().mesh.triangles = triangles;
+
+        plane.AddComponent<MeshRenderer>();
+        plane.GetComponent<MeshRenderer>().material.SetColor("_Color", planeColor);
+
+        plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
+
+        plane.AddComponent<CreateHole>();
     }
 }
