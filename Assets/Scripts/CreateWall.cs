@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
+// using System.Threading.Tasks;
 
 public class CreateWall : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class CreateWall : MonoBehaviour
     //public Color finalColor;
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         // create color increment for RGB
         //float rDiff = (finalColor.r - initialColor.r) / depth;

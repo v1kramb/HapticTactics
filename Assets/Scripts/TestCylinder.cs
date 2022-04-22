@@ -8,12 +8,13 @@ public class TestCylinder : MonoBehaviour
     float next_time;
     int ii = 0;
     GameManager game;
-    
+    private bool collided;
     
     // Start is called before the first frame update
     void Start()
     {
         game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        collided = false;
         //game.SendCommand("h4\n");
     }
 
@@ -21,8 +22,8 @@ public class TestCylinder : MonoBehaviour
     void Update()
     {
         
-
-        transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
+        if (!collided)
+            transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
 
         if (Time.time > next_time)
         {
@@ -38,6 +39,6 @@ public class TestCylinder : MonoBehaviour
     {
         
         game.SendCommand(ii.ToString() + "\n");
-        
+        collided = true;
     }
 }
