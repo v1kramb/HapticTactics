@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.haptictactics.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\hc_calhoun_user\\Desktop\\Student folder\\Haptic Tactics\\Haptic Tactics\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\hc_calhoun_user\\Desktop\\Student Projects\\HapticTactics\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "Haptic Tactics [Testing]"

@@ -87,16 +87,16 @@ public class CreateHole : MonoBehaviour
 
                 // // update mesh triangles
                 // mesh.triangles = triangles.ToArray();
-                mesh.triangles[startIndex] = null;
-                mesh.triangles[startIndex + 1] = null;
-                mesh.triangles[startIndex + 2] = null;
+                //mesh.triangles[startIndex] = null;
+                //mesh.triangles[startIndex + 1] = null;
+                //mesh.triangles[startIndex + 2] = null;
 
                 // // Add new Collider
                 // hit.collider.gameObject.AddComponent<MeshCollider>();
             }
         }
 
-        mesh.triangles = mesh.triangles.Where(c => c != null).ToArray();
+        //mesh.triangles = mesh.triangles.Where(c => c != null).ToArray();
 
 
     }

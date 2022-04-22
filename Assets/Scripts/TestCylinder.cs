@@ -38,7 +38,7 @@ public class TestCylinder : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         
-        game.SendCommand(ii.ToString() + "\n");
+        //game.SendCommand(ii.ToString() + "\n");
         collided = true;
     }
 }
