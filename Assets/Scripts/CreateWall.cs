@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CreateWall : MonoBehaviour
 {
-	public int xSize, ySize;
+	public float xSize, ySize;
 	public int density;
 	public int depth; // number of wall planes
 	public float spacing;
@@ -52,9 +52,9 @@ public class CreateWall : MonoBehaviour
         plane.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, planeZ);
 
         // add components programmatically
-        // plane.AddComponent<Rigidbody>();
+        //plane.AddComponent<Rigidbody>();
         //plane.GetComponent<Rigidbody>().useGravity = false;
-        // plane.GetComponent<Rigidbody>().isKinematic = true;
+        //plane.GetComponent<Rigidbody>().isKinematic = true;
 
         // create custom mesh filter
         plane.AddComponent<MeshFilter>();
@@ -62,7 +62,7 @@ public class CreateWall : MonoBehaviour
         plane.GetComponent<MeshFilter>().mesh.name = "Plane Mesh " + index;
 
         // Generate mesh vertices
-        Vector3[] vertices = new Vector3[(xSize * density + 1) * (ySize * density + 1)];
+        Vector3[] vertices = new Vector3[(int) ((xSize * density + 1) * (ySize * density + 1))];
         for (int i = 0, y = 0; y <= ySize * density; y++)
         {
             for (int x = 0; x <= xSize * density; x++, i++)
@@ -75,7 +75,7 @@ public class CreateWall : MonoBehaviour
         plane.GetComponent<MeshFilter>().mesh.vertices = vertices;
 
         // Generate mesh triangles
-        int[] triangles = new int[xSize * ySize * 6 * density * density];
+        int[] triangles = new int[(int) (xSize * ySize * 6 * density * density)];
 
         for (int ti = 0, vi = 0, y = 0; y < ySize * density; y++, vi++)
         {
@@ -83,8 +83,8 @@ public class CreateWall : MonoBehaviour
             {
                 triangles[ti] = vi;
                 triangles[ti + 3] = triangles[ti + 2] = vi + 1;
-                triangles[ti + 4] = triangles[ti + 1] = vi + (xSize * density) + 1;
-                triangles[ti + 5] = vi + (xSize * density) + 2;
+                triangles[ti + 4] = triangles[ti + 1] = (int) (vi + (xSize * density) + 1);
+                triangles[ti + 5] = (int) (vi + (xSize * density) + 2);
             }
         }
         plane.GetComponent<MeshFilter>().mesh.triangles = triangles;

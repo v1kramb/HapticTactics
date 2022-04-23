@@ -22,24 +22,24 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         
-        next_time = Time.time;
+        //next_time = Time.time;
 
-        foreach (string mysps in SerialPort.GetPortNames())
-        {
-            print(mysps);
-            if (mysps != "COM5") { the_com = mysps; break; }
-        }
-        sp = new SerialPort(the_com, 115200);
+        //foreach (string mysps in SerialPort.GetPortNames())
+        //{
+        //    print(mysps);
+        //    if (mysps != "COM5") { the_com = mysps; break; }
+        //}
+        //sp = new SerialPort(the_com, 115200);
 
-        if (!sp.IsOpen)
-        {
-            print("Opening " + the_com + ", baud 115200");
-            sp.Open();
-            sp.ReadTimeout = 100;
-            sp.Handshake = Handshake.None;
-            if (sp.IsOpen) { print("Open"); }
+        //if (!sp.IsOpen)
+        //{
+        //    print("Opening " + the_com + ", baud 115200");
+        //    sp.Open();
+        //    sp.ReadTimeout = 100;
+        //    sp.Handshake = Handshake.None;
+        //    if (sp.IsOpen) { print("Open"); }
 
-        }
+        //}
     }
 
     // Update is called once per frame
@@ -47,48 +47,48 @@ public class GameManager : MonoBehaviour
     {
         
 
-        if (!sp.IsOpen)
-        {
-            print("Opening " + the_com + ", baud 115200");
-            sp.Open();
-            sp.ReadTimeout = 100;
-            sp.Handshake = Handshake.None;
-            if (sp.IsOpen) { print("Open"); }
-        }
-        string inputStr = ReadCommand();
-        if (inputStr != null)
-        {
-            Debug.Log("Input"+ inputStr);
-            if (inputStr.Equals("Holding"))
-            {
+        //if (!sp.IsOpen)
+        //{
+        //    print("Opening " + the_com + ", baud 115200");
+        //    sp.Open();
+        //    sp.ReadTimeout = 100;
+        //    sp.Handshake = Handshake.None;
+        //    if (sp.IsOpen) { print("Open"); }
+        //}
+        //string inputStr = ReadCommand();
+        //if (inputStr != null)
+        //{
+        //    Debug.Log("Input"+ inputStr);
+        //    if (inputStr.Equals("Holding"))
+        //    {
                 
-                holding = true;
-            }
-            else if (inputStr.Equals("Released"))
-            {
-                holding = false;
-            }
-        }
-        if (holding)
-        {
-            if (!drillAudio.isPlaying)
-                drillAudio.Play();
-            //Debug.Log("Holding");
-            if (!lubed)
-            {
-                checkLube();
-            }
-            else
-            {
-                checkDrillAngle();
-            }
-        }
-        else
-        {
-            //Debug.Log("Released");
-            if (drillAudio.isPlaying)
-                drillAudio.Stop();
-        }
+        //        holding = true;
+        //    }
+        //    else if (inputStr.Equals("Released"))
+        //    {
+        //        holding = false;
+        //    }
+        //}
+        //if (holding)
+        //{
+        //    if (!drillAudio.isPlaying)
+        //        drillAudio.Play();
+        //    //Debug.Log("Holding");
+        //    if (!lubed)
+        //    {
+        //        checkLube();
+        //    }
+        //    else
+        //    {
+        //        checkDrillAngle();
+        //    }
+        //}
+        //else
+        //{
+        //    //Debug.Log("Released");
+        //    if (drillAudio.isPlaying)
+        //        drillAudio.Stop();
+        //}
     }
 
     public void SendCommand(string command) {

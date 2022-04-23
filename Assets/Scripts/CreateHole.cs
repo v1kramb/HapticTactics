@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class CreateHole : MonoBehaviour
 {
+    private GameObject wall;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        wall = GameObject.Find("Wall");
     }
 
     // Update is called once per frame
@@ -16,88 +18,122 @@ public class CreateHole : MonoBehaviour
     {
 
     }
- 
+
+    // Optimized method to filter out particluar indices from list (forbidden triangles from mesh's triangles)
+    // Source: https://stackoverflow.com/questions/63495264/how-can-i-efficiently-remove-elements-by-index-from-a-very-large-list
+    static void FilterOutIndicies(List<int> values, List<int> sortedIndicies)
+    {
+        int sourceStartIndex = 0;
+        int destStartIndex = 0;
+        int spanLength = 0;
+
+        int skipCount = 0;
+
+        // Copy items up to last index to be skipped
+        foreach (var skipIndex in sortedIndicies)
+        {
+            spanLength = skipIndex - sourceStartIndex;
+            destStartIndex = sourceStartIndex - skipCount;
+
+            for (int i = sourceStartIndex; i < sourceStartIndex + spanLength; i++)
+            {
+                values[destStartIndex] = values[i];
+                destStartIndex++;
+            }
+
+            sourceStartIndex = skipIndex + 1;
+            skipCount++;
+        }
+
+        // Copy remaining items (between last index to be skipped and end of list)
+        spanLength = values.Count - sourceStartIndex;
+        destStartIndex = sourceStartIndex - skipCount;
+
+        for (int i = sourceStartIndex; i < sourceStartIndex + spanLength; i++)
+        {
+            values[destStartIndex] = values[i];
+            destStartIndex++;
+        }
+
+        values.RemoveRange(destStartIndex, sortedIndicies.Count);
+    }
+
     void OnTriggerEnter(Collider other) // TODO: behavior for when the drill is drilling vs not drilling
     {
-        // TODO: change raycast logic to cast multiple rays from drillbit
         // TODO: detect if the colliding object is the drillbit
 
         RaycastHit hit;
 
         Vector3 raycastDir = -other.transform.up;
-        Vector3 norm1 = Vector3.Normalize(other.transform.forward); // our two basis vectors
-        Vector3 norm2 = Vector3.Normalize(other.transform.right);
+        Vector3 norm1 = Vector3.Normalize(other.transform.right); // our two basis vectors
+        Vector3 norm2 = Vector3.Normalize(other.transform.forward);
 
-        // Starting point of raycast needs to be offset from other.transform.position
-        // Find a point further back on the line created by position and up
-        Vector3 offsetPosition = other.transform.position - (0.1f * raycastDir);
-
-        // Debug.DrawRay(offsetPosition, -other.transform.up, Color.red, 100);
+        Vector3 offsetPosition = other.transform.position; // - (0.01f * raycastDir);
 
         float radius = other.GetComponent<CapsuleCollider>().radius * 0.05f; // radius of colliding cylinder
-        // int density = GameObject.Find("Wall").GetComponent<CreateWall>().density;
+        float planeSpacing = wall.GetComponent<CreateWall>().spacing * 2;
+
+        float triDistance = 0.2f / wall.GetComponent<CreateWall>().density;
 
         // cast several rays from points on the the cylinder's circle
         List<Vector3> positions = new List<Vector3>();
+        positions.Add(offsetPosition);
 
-        // goal: find N points (A, B) on a circle of radius R
-        // solution: simplify complexity by finding points on a square whose "radius" increases from 0 to R
-        int numCircles = 2;
-        for (float r = 0; r <= radius; r += (radius/(numCircles)))
+        for (float yMult = -radius - (triDistance/2); yMult < radius + (triDistance/2); yMult += triDistance)
         {
-            float multiplier = r / Mathf.Sqrt(2); // Think of an isoceles triangle with hypotenuse r
-
-            Vector3 position1 = offsetPosition + (multiplier * norm1) + (multiplier * norm2);
-            Vector3 position2 = offsetPosition - (multiplier * norm1) + (multiplier * norm2);
-            Vector3 position3 = offsetPosition + (multiplier * norm1) - (multiplier * norm2);
-            Vector3 position4 = offsetPosition - (multiplier * norm1) - (multiplier * norm2);
-
-            positions.Add(position1);
-            positions.Add(position2);
-            positions.Add(position3);
-            positions.Add(position4);
-        }
-
-        // TODO: update this logic to accomodate multiple tris being removed
-
-        List<int> forbiddenTris = new List<int>(); // TODO: add indexes of collided tris and axe them
-
-        foreach (Vector3 position in positions)
-        {
-            if (Physics.Raycast(position, -other.transform.up, out hit, 10.0f)) // TODO: may want to incorporate density of planes
+            for (float xMult = -radius - (triDistance/2); xMult < radius + (triDistance/2); xMult += triDistance)
             {
-                Debug.DrawRay(position, -other.transform.up, Color.red, 100);
+                Vector3 sum = (xMult * norm1) + (yMult * norm2);
 
-                // // Destroy collider
-                // Destroy(hit.collider.GetComponent<MeshCollider>());
-
-                // Store the mesh from MeshFilter
-                Mesh mesh = hit.collider.GetComponent<MeshFilter>().mesh;
-
-                // // Store the triangles in a list
-                // List<int> triangles = new List<int>();
-
-                // triangles.AddRange(mesh.triangles);
-
-                // Calculate the startIndex (At what number we start removing)
-                int startIndex = hit.triangleIndex * 3;
-
-                // // delete the three vertices
-                // triangles.RemoveRange(startIndex, 3);
-
-                // // update mesh triangles
-                // mesh.triangles = triangles.ToArray();
-                //mesh.triangles[startIndex] = null;
-                //mesh.triangles[startIndex + 1] = null;
-                //mesh.triangles[startIndex + 2] = null;
-
-                // // Add new Collider
-                // hit.collider.gameObject.AddComponent<MeshCollider>();
+                if (sum.magnitude <= radius)
+                {
+                    positions.Add(offsetPosition + sum);
+                }
             }
         }
 
-        //mesh.triangles = mesh.triangles.Where(c => c != null).ToArray();
+        // raycast from those points to the plane
+        List<int> forbiddenTris = new List<int>(); // stores indices of vertices to be removed
 
+        foreach (Vector3 position in positions)
+        {
+            Ray ray = new Ray(position, raycastDir);
+            if (GetComponent<MeshCollider>().Raycast(ray, out hit, planeSpacing))
+            {
+                //if (gameObject.name == "Plane 0")
+                //{
+                //    Debug.DrawRay(position, raycastDir * planeSpacing, Color.red, 100.0f);
+                //}
 
+                // Add start of new triangle to forbidden list
+                int startIndex = hit.triangleIndex * 3;
+
+                if (!forbiddenTris.Contains(startIndex)) { // multiple raycasts may cause overlap
+                    forbiddenTris.Add(startIndex);
+                    forbiddenTris.Add(startIndex + 1); // not efficient (multiplies sort time by 3)
+                    forbiddenTris.Add(startIndex + 2); // not efficient
+                }
+            }
+        }
+
+        // Destroy collider
+        Destroy(GetComponent<MeshCollider>());
+
+        // Store the mesh from MeshFilter
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+
+        // Create temporary list for new triangles
+        List<int> newMesh = new List<int>();
+        newMesh.AddRange(mesh.triangles);
+
+        // Efficient list removal (needed for dense meshes)
+        forbiddenTris.Sort();
+        FilterOutIndicies(newMesh, forbiddenTris);
+
+        // Update mesh triangles
+        mesh.triangles = newMesh.ToArray();
+
+        // Add new collider
+        gameObject.AddComponent<MeshCollider>();
     }
 }

@@ -624,7 +624,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -1161,7 +1161,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!21 &816127104
+--- !u!21 &804198247
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -1274,12 +1274,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c4a9eeb5e0c69d499da338964f16b63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 1
-  ySize: 1
-  density: 30
-  depth: 15
-  spacing: 0.1
-  materialIndexes: 050000000a000000
+  xSize: 0.125
+  ySize: 0.125
+  density: 200
+  depth: 10
+  spacing: 0.02
+  materialIndexes: 0300000006000000
   colors:
   - {r: 0.11743506, g: 0.8584906, b: 0.77521306, a: 0}
   - {r: 0.27778548, g: 0.8396226, b: 0.20990565, a: 0}
@@ -1292,7 +1292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873823425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.43, y: 0.207, z: 0.254}
+  m_LocalPosition: {x: 0.0924, y: 0.6612, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1562,7 +1562,99 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1000012695253110, guid: f5a2d19d564785d45a6207078113bcaa, type: 3}
   m_PrefabInstance: {fileID: 1152542314}
   m_PrefabAsset: {fileID: 0}
---- !u!43 &1203717577
+--- !u!1 &1297423534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1297423535}
+  - component: {fileID: 1297423536}
+  - component: {fileID: 1297423538}
+  - component: {fileID: 1297423537}
+  - component: {fileID: 1297423539}
+  m_Layer: 0
+  m_Name: DrillCollide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1297423535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297423534}
+  m_LocalRotation: {x: -0.36088458, y: -0.6022761, z: 0.6144712, w: -0.3597931}
+  m_LocalPosition: {x: 0.07601909, y: -0.1694976, z: 0.04349923}
+  m_LocalScale: {x: 0.00050000026, y: 0.0005000002, z: 0.00050000014}
+  m_Children:
+  - {fileID: 3504763318577349135}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: -0.805, y: 129.42, z: 241.28}
+--- !u!136 &1297423536
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297423534}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 8.201466
+  m_Height: 105.6325
+  m_Direction: 2
+  m_Center: {x: -2.212091, y: -173.0651, z: -22.183708}
+--- !u!138 &1297423537
+FixedJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297423534}
+  m_ConnectedBody: {fileID: 1635574816526680102}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!54 &1297423538
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297423534}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1297423539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297423534}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa02c46a996f914d864ed89bc9a8568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!43 &1361141987
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1726,98 +1818,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1297423534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1297423535}
-  - component: {fileID: 1297423536}
-  - component: {fileID: 1297423538}
-  - component: {fileID: 1297423537}
-  - component: {fileID: 1297423539}
-  m_Layer: 0
-  m_Name: DrillCollide
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1297423535
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297423534}
-  m_LocalRotation: {x: -0.36088458, y: -0.6022761, z: 0.6144712, w: -0.3597931}
-  m_LocalPosition: {x: 0.07601909, y: -0.1694976, z: 0.04349923}
-  m_LocalScale: {x: 0.00050000026, y: 0.0005000002, z: 0.00050000014}
-  m_Children:
-  - {fileID: 3504763318577349135}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: -0.805, y: 129.42, z: 241.28}
---- !u!136 &1297423536
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297423534}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 10
-  m_Height: 150
-  m_Direction: 2
-  m_Center: {x: -0.000031533753, y: -172.65605, z: 0.000026459966}
---- !u!138 &1297423537
-FixedJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297423534}
-  m_ConnectedBody: {fileID: 1635574816526680102}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
---- !u!54 &1297423538
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297423534}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1297423539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297423534}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa02c46a996f914d864ed89bc9a8568, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1429775970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1856,7 +1856,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429775970}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ff9e868bc67574e428bf021a292a55f9, type: 3}
@@ -1987,11 +1987,11 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 816127104}
+      objectReference: {fileID: 804198247}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1203717577}
+      objectReference: {fileID: 1361141987}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
 --- !u!1 &1474170598 stripped
@@ -2343,7 +2343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009ef4d8afb6d7b4a82ab220bc05c2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drillAudio: {fileID: 1429775972}
+  drillAudio: {fileID: 0}
   drill: {fileID: 1152542315}
   lubed: 1
 --- !u!4 &1696645500
@@ -2524,7 +2524,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635574816526680099}
   m_LocalRotation: {x: -0.779434, y: 0.4582065, z: -0.36430764, w: -0.22317989}
-  m_LocalPosition: {x: 29.053879, y: -21.829008, z: 141.65067}
+  m_LocalPosition: {x: 28.7, y: -22.6, z: 91.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1297423535}
@@ -2587,7 +2587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8209103611941356666}
   m_LocalRotation: {x: 0.29883623, y: -0.6408564, z: -0.6408564, w: 0.29883623}
-  m_LocalPosition: {x: 0.05875, y: -0.24025011, z: 0.03699997}
+  m_LocalPosition: {x: 0.05875, y: -0.2153, z: 0.03699997}
   m_LocalScale: {x: 0.00050000014, y: 0.0005000002, z: 0.0005000002}
   m_Children: []
   m_Father: {fileID: 0}

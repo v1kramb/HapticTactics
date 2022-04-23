@@ -21,18 +21,19 @@ public class TestCylinder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (!collided)
-            transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
+        transform.Translate(0, -Time.deltaTime, 0);
 
-        if (Time.time > next_time)
-        {
-            //Debug.Log(game.ReadCommand());
-            next_time = Time.time + 5;
-            game.SendCommand("4\n");
+        //if (!collided)
+        //    transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
 
-            if (++ii > 20) ii = 0;
-        }
+        //if (Time.time > next_time)
+        //{
+        //    //Debug.Log(game.ReadCommand());
+        //    next_time = Time.time + 5;
+        //    game.SendCommand("4\n");
+
+        //    if (++ii > 20) ii = 0;
+        //}
     }
 
     void OnTriggerEnter(Collider other)
