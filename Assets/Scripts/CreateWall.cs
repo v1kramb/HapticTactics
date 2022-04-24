@@ -58,8 +58,8 @@ public class CreateWall : MonoBehaviour
 
         // create custom mesh filter
         plane.AddComponent<MeshFilter>();
-        plane.GetComponent<MeshFilter>().mesh = new Mesh();
-        plane.GetComponent<MeshFilter>().mesh.name = "Plane Mesh " + index;
+        Mesh mesh = plane.GetComponent<MeshFilter>().mesh;
+        mesh.name = "Plane Mesh " + index;
 
         // Generate mesh vertices
         Vector3[] vertices = new Vector3[(int) ((xSize * density + 1) * (ySize * density + 1))];
@@ -72,7 +72,10 @@ public class CreateWall : MonoBehaviour
                 vertices[i] = new Vector3(newX, newY);
             }
         }
-        plane.GetComponent<MeshFilter>().mesh.vertices = vertices;
+
+        //Mesh mesh = plane.GetComponent<MeshFilter>().mesh;
+
+        mesh.vertices = vertices;
 
         // Generate mesh triangles
         int[] triangles = new int[(int) (xSize * ySize * 6 * density * density)];
@@ -87,11 +90,26 @@ public class CreateWall : MonoBehaviour
                 triangles[ti + 5] = (int) (vi + (xSize * density) + 2);
             }
         }
-        plane.GetComponent<MeshFilter>().mesh.triangles = triangles;
+        mesh.triangles = triangles;
 
-        plane.AddComponent<MeshRenderer>();
-        plane.GetComponent<MeshRenderer>().material.SetColor("_Color", planeColor);
+        // Set colors of tris
+        Color[] colors = new Color[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+            colors[i] = planeColor;
 
+        // Mark holes to drill
+        List<int> holesToDrill = new List<int>() { 300 };
+
+        foreach (int idx in holesToDrill)
+            colors[idx] = Color.red;
+
+        mesh.colors = colors;
+
+        // Add mesh renderer with material that makes triangle color visible
+        MeshRenderer meshRenderer = plane.AddComponent<MeshRenderer>();
+        meshRenderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
+
+        // Add mesh collider at the end and script to make holes in mesh
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
 
         plane.AddComponent<CreateHole>();

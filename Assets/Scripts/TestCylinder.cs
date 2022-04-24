@@ -21,7 +21,7 @@ public class TestCylinder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0, -Time.deltaTime, 0);
+        //transform.Translate(0, -Time.deltaTime, 0);
 
         //if (!collided)
         //    transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec

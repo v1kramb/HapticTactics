@@ -19,7 +19,7 @@ public class CreateHole : MonoBehaviour
 
     }
 
-    // Optimized method to filter out particluar indices from list (forbidden triangles from mesh's triangles)
+    // Optimized method to filter out particular indices from list (forbidden triangles from mesh's triangles)
     // Source: https://stackoverflow.com/questions/63495264/how-can-i-efficiently-remove-elements-by-index-from-a-very-large-list
     static void FilterOutIndicies(List<int> values, List<int> sortedIndicies)
     {
@@ -41,21 +41,11 @@ public class CreateHole : MonoBehaviour
                 destStartIndex++;
             }
 
-            sourceStartIndex = skipIndex + 1;
-            skipCount++;
+            sourceStartIndex = skipIndex + 3; // skips entire triangle
+            skipCount += 3;
         }
 
-        // Copy remaining items (between last index to be skipped and end of list)
-        spanLength = values.Count - sourceStartIndex;
-        destStartIndex = sourceStartIndex - skipCount;
-
-        for (int i = sourceStartIndex; i < sourceStartIndex + spanLength; i++)
-        {
-            values[destStartIndex] = values[i];
-            destStartIndex++;
-        }
-
-        values.RemoveRange(destStartIndex, sortedIndicies.Count);
+        values.RemoveRange(destStartIndex, sortedIndicies.Count * 3);
     }
 
     void OnTriggerEnter(Collider other) // TODO: behavior for when the drill is drilling vs not drilling
@@ -70,7 +60,7 @@ public class CreateHole : MonoBehaviour
 
         Vector3 offsetPosition = other.transform.position; // - (0.01f * raycastDir);
 
-        float radius = other.GetComponent<CapsuleCollider>().radius * 0.05f; // radius of colliding cylinder
+        float radius = other.GetComponent<CapsuleCollider>().radius * 0.05f; // radius of colliding cylinder (*0.05 because of scaling in transform)
         float planeSpacing = wall.GetComponent<CreateWall>().spacing * 2;
 
         float triDistance = 0.2f / wall.GetComponent<CreateWall>().density;
@@ -79,7 +69,7 @@ public class CreateHole : MonoBehaviour
         List<Vector3> positions = new List<Vector3>();
         positions.Add(offsetPosition);
 
-        for (float yMult = -radius - (triDistance/2); yMult < radius + (triDistance/2); yMult += triDistance)
+        for (float yMult = -radius - (triDistance/2); yMult < radius + (triDistance/2); yMult += triDistance) // good enough, can probably be improved
         {
             for (float xMult = -radius - (triDistance/2); xMult < radius + (triDistance/2); xMult += triDistance)
             {
@@ -108,10 +98,9 @@ public class CreateHole : MonoBehaviour
                 // Add start of new triangle to forbidden list
                 int startIndex = hit.triangleIndex * 3;
 
-                if (!forbiddenTris.Contains(startIndex)) { // multiple raycasts may cause overlap
-                    forbiddenTris.Add(startIndex);
-                    forbiddenTris.Add(startIndex + 1); // not efficient (multiplies sort time by 3)
-                    forbiddenTris.Add(startIndex + 2); // not efficient
+                if (!forbiddenTris.Contains(startIndex)) // multiple raycasts may cause overlap
+                { 
+                    forbiddenTris.Add(startIndex); // startIndex, startIndex + 1, and startIndex + 2 will be discarded
                 }
             }
         }
