@@ -46,7 +46,7 @@ public class CreateWall : MonoBehaviour
     {
         GameObject plane = new GameObject();
         plane.name = "Plane " + index; // now we can map collision to material type easily
-        
+        plane.tag = "drillingwall";
         // define position
         plane.transform.parent = this.transform;
         plane.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, planeZ);
@@ -113,5 +113,7 @@ public class CreateWall : MonoBehaviour
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
 
         plane.AddComponent<CreateHole>();
+       // plane.AddComponent<SparkTrigger>();
+
     }
 }

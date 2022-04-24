@@ -10,7 +10,7 @@ public class UI_Handler : MonoBehaviour
 
     void Start()
     {
-        game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        game = FindObjectOfType<GameManager>();
         //scaleChange = new Vector3(-0.01f, -0.01f, -0.01f);
     }
 
