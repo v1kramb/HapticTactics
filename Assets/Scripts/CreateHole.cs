@@ -54,9 +54,9 @@ public class CreateHole : MonoBehaviour
 
         RaycastHit hit;
 
-        Vector3 raycastDir = -other.transform.up;
-        Vector3 norm1 = Vector3.Normalize(other.transform.right); // our two basis vectors
-        Vector3 norm2 = Vector3.Normalize(other.transform.forward);
+        Vector3 raycastDir = -other.transform.forward;
+        Vector3 norm1 = Vector3.Normalize(other.transform.up); // our two basis vectors
+        Vector3 norm2 = Vector3.Normalize(other.transform.right);
 
         Vector3 offsetPosition = other.transform.position; // - (0.01f * raycastDir);
 

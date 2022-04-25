@@ -6,7 +6,7 @@ public class SparkTrigger : MonoBehaviour
 {
     private GameObject spark;
     GameManager gameManager;
-    bool drilling = false;
+    public bool drilling = false;
     private float maxDepth = -1000f;
     private GameObject wall;
     // Start is called before the first frame update

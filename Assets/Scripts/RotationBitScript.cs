@@ -6,36 +6,33 @@ using UnityEngine;
 
 public class RotationBitScript : MonoBehaviour
 {
-    // private GameObject drill;
-    private float[] allSpeeds = { 100f, 75f }; // TODO: use slider instead of discrete values
-    private float speed = 100f;
-    private bool isRotating = false; // TODO: using in this script for debug purposes
+    GameManager gameManager;
+    private float currSpeed;
+    private float maxSpeed = 1000f;
 
     // Start is called before the first frame update
     void Start()
     {
-        // drill = GameObject.Find("Drill");
+        gameManager = FindObjectOfType<GameManager>();
+        currSpeed = 1000f;
     }
 
-    // Update is called once per frame
-    void Update() // TODO: add input from button to change isRotating
+    void Update()
     {
-        if (isRotating)
+
+        if (gameManager.holding)
         {
-            transform.Rotate(0, speed * Time.deltaTime, 0);
+            transform.Rotate(0, 0, Time.deltaTime * currSpeed);
         }
-    }
 
-    void OnTriggerEnter(Collider other) // TODO: check specific collider to change speed to approriate value
-    {
-        
-        isRotating = true; // delete after testing
-        speed = allSpeeds[1];  // on a collision, lower the drill bit's speed
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        isRotating = false; // delete after testing
-        speed = allSpeeds[0];
+        if (GetComponent<SparkTrigger>().drilling)
+        {
+            // TODO: lower speed based on resistance of wall
+            currSpeed = 500f;
+        }
+        else
+        {
+            currSpeed = maxSpeed;
+        }
     }
 }

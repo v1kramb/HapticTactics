@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
                 holding = false;
             }
         }
-        //holding = true;
+        holding = true;
         if (holding)
         {
             if (!drillAudio.isPlaying)
