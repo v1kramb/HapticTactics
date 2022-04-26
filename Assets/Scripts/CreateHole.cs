@@ -6,11 +6,13 @@ using UnityEngine;
 public class CreateHole : MonoBehaviour
 {
     private GameObject wall;
+    GameManager game;
 
     // Start is called before the first frame update
     void Start()
     {
         wall = GameObject.Find("Wall");
+        game = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -50,8 +52,10 @@ public class CreateHole : MonoBehaviour
 
     void OnTriggerEnter(Collider other) // TODO: behavior for when the drill is drilling vs not drilling
     {
-        // TODO: detect if the colliding object is the drillbit
-
+        // TODO: change offsetPosition for drillbit (?)
+        if (!game.holding)
+            return;
+        
         RaycastHit hit;
 
         Vector3 raycastDir = -other.transform.forward;
@@ -69,7 +73,7 @@ public class CreateHole : MonoBehaviour
         List<Vector3> positions = new List<Vector3>();
         positions.Add(offsetPosition);
 
-        for (float yMult = -radius - (triDistance/2); yMult < radius + (triDistance/2); yMult += triDistance) // good enough, can probably be improved
+        for (float yMult = -radius - (triDistance/2); yMult < radius + (triDistance/2); yMult += triDistance) // TODO: triDistance is probably broken lol
         {
             for (float xMult = -radius - (triDistance/2); xMult < radius + (triDistance/2); xMult += triDistance)
             {
@@ -121,6 +125,25 @@ public class CreateHole : MonoBehaviour
 
         // Update mesh triangles
         mesh.triangles = newMesh.ToArray();
+
+        // Instead of editing the mesh, make the color of the tris transparent
+        // forbiddenTris contain indices corresponding to mesh.triangles, not mesh.vertices
+
+        //Color[] colors = new Color[mesh.colors.Length];
+        //for (int i = 0; i < mesh.colors.Length; i++)
+        //    colors[i] = mesh.colors[i];
+
+        //Color temp = mesh.colors[0]; // have to cache color to change its albedo
+        //temp.a = 0.0f; // transparent
+
+        //foreach (int idx in forbiddenTris)
+        //{
+        //    colors[mesh.triangles[idx]] = temp;
+        //    colors[mesh.triangles[idx]] = temp;
+        //    colors[mesh.triangles[idx + 2]] = temp;
+        //}
+
+        //mesh.colors = colors;
 
         // Add new collider
         gameObject.AddComponent<MeshCollider>();

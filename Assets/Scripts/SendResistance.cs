@@ -2,39 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
+using System;
+
 public class SendResistance : MonoBehaviour
 {
-    SerialPort sp;
-    float next_time;
-    int ii = 0;
     GameManager game;
+    private GameObject wall;
+    private int currWall;
+    float next_time;
+
     private bool collided;
-    
     // Start is called before the first frame update
     void Start()
     {
-        game = GameObject.Find("GameManager").GetComponent<GameManager>();
-        collided = false;
-        game.SendCommand("h4\n");
+        game = FindObjectOfType<GameManager>();
+        wall = GameObject.Find("Wall");
+        currWall = 0;
+        next_time = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.time > next_time)
-        {
-            //Debug.Log(game.ReadCommand());
-            next_time = Time.time + 5;
-            game.SendCommand("4\n");
 
-            if (++ii > 20) ii = 0;
-        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        
-        game.SendCommand(ii.ToString() + "\n");
-        collided = true;
+        if (Time.time > next_time && game.holding)
+        {
+            next_time = Time.time + 0.2f;
+
+            if (other.gameObject.name.StartsWith("Plane ")) {
+                int planeIdx = Int32.Parse(other.gameObject.name.Split(' ')[1]);
+
+                // 0
+                // 3, 10, 20
+
+                if (currWall != wall.GetComponent<CreateWall>().resistances.Length - 1 && planeIdx == wall.GetComponent<CreateWall>().materialIndexes[currWall])
+                    currWall++;
+
+                game.SendCommand(wall.GetComponent<CreateWall>().resistances[currWall].ToString() + "\n");
+            }
+        }
     }
 }

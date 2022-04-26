@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 // using System.Threading.Tasks;
 
 public class CreateWall : MonoBehaviour
@@ -11,9 +12,11 @@ public class CreateWall : MonoBehaviour
 	public float spacing;
     public int[] materialIndexes; // length 1 if 2 materials
     public Color[] colors;
+    public int[] resistances; // length should equal the number of walls
+
     //public Color initialColor;
     //public Color finalColor;
-
+    public Material metalMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +26,7 @@ public class CreateWall : MonoBehaviour
         //float bDiff = (finalColor.b - initialColor.b) / depth;
 
         // create depth planes with spacing
-        float initialZ = this.transform.position.z;
+        float initialZ = this.transform.position.z; // last plane
         int colorIndex = 0;
         
         for (int i = 0; i < depth; i++)
@@ -34,6 +37,7 @@ public class CreateWall : MonoBehaviour
             }
             CreatePlane(i, initialZ + i * spacing, colors[colorIndex]);
         }
+        //metalMaterial = Resources.Load("metal11_diffuse", typeof(Material)) as Material;
     }
 
     // Update is called once per frame
@@ -50,7 +54,7 @@ public class CreateWall : MonoBehaviour
         // define position
         plane.transform.parent = this.transform;
         plane.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, planeZ);
-
+        
         // add components programmatically
         //plane.AddComponent<Rigidbody>();
         //plane.GetComponent<Rigidbody>().useGravity = false;
@@ -108,7 +112,10 @@ public class CreateWall : MonoBehaviour
         // Add mesh renderer with material that makes triangle color visible
         MeshRenderer meshRenderer = plane.AddComponent<MeshRenderer>();
         meshRenderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
-
+        
+        //plane.GetComponent<Renderer>().material = metalMaterial;
+        //meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
+        
         // Add mesh collider at the end and script to make holes in mesh
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
 

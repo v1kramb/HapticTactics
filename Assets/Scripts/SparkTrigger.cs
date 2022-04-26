@@ -20,6 +20,8 @@ public class SparkTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // TODO: this code is bad since it relies on a preset wall. we can track the normal to the wall plane instead
+        // and find the closest point by using that as an axis
         if (transform.position.z <= wall.transform.position.z)
         {
             maxDepth = wall.transform.position.z;
@@ -43,10 +45,10 @@ public class SparkTrigger : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Triggered");
+        //Debug.Log("Triggered");
         if (other.gameObject.tag == "drillingwall")
         {
-            Debug.Log("Drillbit");
+            //Debug.Log("Drillbit");
             drilling = true;
         }
        

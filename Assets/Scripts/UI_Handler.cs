@@ -28,10 +28,10 @@ public class UI_Handler : MonoBehaviour
         lubeButton = GameObject.Find("LubeButton");
 
         one_4_scale = transform.localScale;
-        one_2_scale = one_4_scale / 2.0f;
-        one_8_scale = one_4_scale * 2.0f;
+        one_2_scale = new Vector3(transform.localScale.x * 2f, transform.localScale.y * 2f, transform.localScale.z);
+        one_8_scale = new Vector3(transform.localScale.x / 2f, transform.localScale.y / 2f, transform.localScale.z);
 
-        // Hide the drill bit size optoins
+        // Hide the drill bit size options
         Drillbit();
     }
 
@@ -77,31 +77,40 @@ public class UI_Handler : MonoBehaviour
 
     void Update()
     {
-        RaycastHit hit;
-        Vector3 position = transform.position;
         Vector3 raycastDir = -transform.forward;
+        Vector3 position = transform.position + (0.1f * raycastDir); // so it doesn't collide with itself
 
-        Debug.DrawRay(position, raycastDir * 1000, Color.red);
-        if (Physics.Raycast(position, raycastDir, out hit))
+        //Debug.DrawRay(position, raycastDir * 1000, Color.red);
+        //Debug.DrawRay(position, -raycastDir * 1000, Color.blue);
+        string readSignal = game.inputStr;
+        if (readSignal == "Double Click")
         {
-            switch (hit.collider.gameObject.name)
+            RaycastHit hit;
+
+            Debug.DrawRay(position, raycastDir * 1000, Color.red, 10f);
+            if (Physics.Raycast(position, raycastDir, out hit))
             {
-                case "DrillbitButton":
-                    Drillbit();
-                    break;
-                case "LubeButton":
-                    Lube();
-                    break;
-                case "1/8":
-                    SizeButton("1/8");
-                    break;
-                case "1/4":
-                    SizeButton("1/4");
-                    break;
-                case "1/2":
-                    SizeButton("1/2");
-                    break;
+                Debug.Log(hit.collider.gameObject.name);
+                switch (hit.collider.gameObject.name)
+                {
+                    case "DrillbitButton":
+                        Drillbit();
+                        break;
+                    case "LubeButton":
+                        Lube();
+                        break;
+                    case "1/8":
+                        SizeButton("1/8");
+                        break;
+                    case "1/4":
+                        SizeButton("1/4");
+                        break;
+                    case "1/2":
+                        SizeButton("1/2");
+                        break;
+                }
             }
+            
         }
     }
 }

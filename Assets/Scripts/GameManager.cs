@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject wall;
     public GameObject drill;
     float angleTolerance = 10.0f;
-
+    public string inputStr;
     public bool lubed = false;
     // Start is called before the first frame update
     void Start()
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
             sp.Handshake = Handshake.None;
             if (sp.IsOpen) { print("Open"); }
         }
-        string inputStr = ReadCommand();
+        inputStr = ReadCommand();
         if (inputStr != null)
         {
             Debug.Log("Input" + inputStr);
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
                 holding = false;
             }
         }
-        holding = true;
+        //holding = true;
         if (holding)
         {
             if (!drillAudio.isPlaying)
@@ -158,17 +158,14 @@ public class GameManager : MonoBehaviour
 
     public void checkLube()
     {
-        if (lubed)
+        if (!lubed)
         {
             if (Time.time > next_time)
             {
                 next_time = Time.time + 0.5f;
-                SendCommand("69\n");
+                SendCommand("100\n");
             }
         }
-        else
-        {
-            SendCommand("40\n");
-        }
+        
     }
 }

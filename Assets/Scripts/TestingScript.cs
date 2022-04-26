@@ -22,7 +22,7 @@ public class TestingScript : MonoBehaviour
     {
 
 
-        //transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
+        transform.Translate(0, -Time.deltaTime, 0);  // move along x axis 1 unit/sec
         /**string command = game.ReadCommand();
         if (command != null)
         {
