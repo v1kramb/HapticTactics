@@ -18,6 +18,7 @@ public class CreateWall : MonoBehaviour
     //public Color finalColor;
     public Material metalMaterial;
     // Start is called before the first frame update
+    float darkness = 0.95f;
     void Start()
     {
         // create color increment for RGB
@@ -95,11 +96,12 @@ public class CreateWall : MonoBehaviour
             }
         }
         mesh.triangles = triangles;
-
+        Color newPlaneColor = new Color(planeColor.r * darkness, planeColor.g * darkness, planeColor.b * darkness);
+        darkness *= darkness;
         // Set colors of tris
         Color[] colors = new Color[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
-            colors[i] = planeColor;
+            colors[i] = newPlaneColor;
 
         // Mark holes to drill
         List<int> holesToDrill = new List<int>() { 1 };
@@ -121,6 +123,7 @@ public class CreateWall : MonoBehaviour
 
         plane.AddComponent<CreateHole>();
        // plane.AddComponent<SparkTrigger>();
+       //plane.transform.Rotate(180.0f, 0.0f, 0.0f, Space.Self);
 
     }
 }
