@@ -13,10 +13,11 @@ public class CreateWall : MonoBehaviour
     public int[] materialIndexes; // length 1 if 2 materials
     public Color[] colors;
     public int[] resistances; // length should equal the number of walls
-
+    public Material transparent;
     //public Color initialColor;
     //public Color finalColor;
-    public Material metalMaterial;
+    //public Material metalMaterial;
+    public Shader wallShader;
     // Start is called before the first frame update
     float darkness = 0.95f;
     void Start()
@@ -96,7 +97,8 @@ public class CreateWall : MonoBehaviour
             }
         }
         mesh.triangles = triangles;
-        Color newPlaneColor = new Color(planeColor.r * darkness, planeColor.g * darkness, planeColor.b * darkness);
+        Color newPlaneColor = new Color(planeColor.r * darkness, planeColor.g * darkness, planeColor.b * darkness, 1);
+        
         darkness *= darkness;
         // Set colors of tris
         Color[] colors = new Color[vertices.Length];
@@ -104,7 +106,7 @@ public class CreateWall : MonoBehaviour
             colors[i] = newPlaneColor;
 
         // Mark holes to drill
-        List<int> holesToDrill = new List<int>() { 1 };
+        List<int> holesToDrill = new List<int>() { 23, 94, 119 };
 
         foreach (int idx in holesToDrill)
             colors[idx] = Color.red;
@@ -113,14 +115,16 @@ public class CreateWall : MonoBehaviour
 
         // Add mesh renderer with material that makes triangle color visible
         MeshRenderer meshRenderer = plane.AddComponent<MeshRenderer>();
-        meshRenderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
-        
+        meshRenderer.material = new Material(Shader.Find("Particles/Standard Surface")); // Particles/Standard surface
+        meshRenderer.material.enableInstancing = true;
+
+        // meshRenderer.material.SetFloat("_Mode", 2);
+       //meshRenderer.material = transparent;
         //plane.GetComponent<Renderer>().material = metalMaterial;
         //meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
-        
+
         // Add mesh collider at the end and script to make holes in mesh
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
-
         plane.AddComponent<CreateHole>();
        // plane.AddComponent<SparkTrigger>();
        //plane.transform.Rotate(180.0f, 0.0f, 0.0f, Space.Self);

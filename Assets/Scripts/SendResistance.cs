@@ -36,11 +36,14 @@ public class SendResistance : MonoBehaviour
             if (other.gameObject.name.StartsWith("Plane ")) {
                 int planeIdx = Int32.Parse(other.gameObject.name.Split(' ')[1]);
 
-                // 0
-                // 3, 10, 20
-
                 if (currWall != wall.GetComponent<CreateWall>().resistances.Length - 1 && planeIdx == wall.GetComponent<CreateWall>().materialIndexes[currWall])
                     currWall++;
+
+                if (planeIdx == wall.GetComponent<CreateWall>().depth - 1) // reset when we hit the last plane
+                { 
+                    currWall = 0;
+                    game.holding = false;
+                }
 
                 game.SendCommand(wall.GetComponent<CreateWall>().resistances[currWall].ToString() + "\n");
             }
