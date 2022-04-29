@@ -106,7 +106,7 @@ public class CreateWall : MonoBehaviour
             colors[i] = newPlaneColor;
 
         // Mark holes to drill
-        List<int> holesToDrill = new List<int>() { 23, 94, 119 };
+        List<int> holesToDrill = new List<int>() { 60, 94, 119 };
 
         foreach (int idx in holesToDrill)
             colors[idx] = Color.red;
