@@ -10,7 +10,7 @@ public class CreateWall : MonoBehaviour
 	public int density;
 	public int depth; // number of wall planes
 	public float spacing;
-    public int[] materialIndexes; // length 1 if 2 materials
+    public int[] materialIndexes;
     public Color[] colors;
     public int[] resistances; // length should equal the number of walls
     public Material transparent;
@@ -39,6 +39,12 @@ public class CreateWall : MonoBehaviour
             }
             CreatePlane(i, initialZ + i * spacing, colors[colorIndex]);
         }
+
+        GameObject wallContainer = transform.parent.gameObject;
+        BoxCollider b = wallContainer.AddComponent<BoxCollider>();
+        b.isTrigger = true;
+        b.center = new Vector3(b.center.x + (xSize / 2f), b.center.y + (ySize / 2f), b.center.z + ((spacing * depth) / 2f));
+        b.size = new Vector3(-xSize, -ySize, spacing * depth);
         //metalMaterial = Resources.Load("metal11_diffuse", typeof(Material)) as Material;
     }
 

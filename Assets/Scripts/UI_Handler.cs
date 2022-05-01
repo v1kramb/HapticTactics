@@ -17,6 +17,8 @@ public class UI_Handler : MonoBehaviour
     private Vector3 one_4_scale;
     private Vector3 one_2_scale;
 
+    public Color initialBitColor;
+
     void Start()
     {
         game = FindObjectOfType<GameManager>();
@@ -30,6 +32,8 @@ public class UI_Handler : MonoBehaviour
         one_4_scale = transform.localScale;
         one_2_scale = new Vector3(transform.localScale.x * 2f, transform.localScale.y * 2f, transform.localScale.z);
         one_8_scale = new Vector3(transform.localScale.x / 2f, transform.localScale.y / 2f, transform.localScale.z);
+
+        initialBitColor = GetComponent<MeshRenderer>().material.color;
 
         // Hide the drill bit size options
         Drillbit();
@@ -69,14 +73,19 @@ public class UI_Handler : MonoBehaviour
     {
         // TODO: reset this to true after hole has been drilled
         lubeButton.GetComponent<Button>().interactable = false;
-
         GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
-
         game.lubed = true;
     }
 
-    void Update()
+    public void ResetLubeButton()
     {
+        lubeButton.GetComponent<Button>().interactable = true;
+        GetComponent<MeshRenderer>().material.SetColor("_Color", initialBitColor);
+        game.lubed = false;
+    }
+
+    void Update()
+    {   
         Vector3 raycastDir = -transform.forward;
         Vector3 position = transform.position + (0.1f * raycastDir); // so it doesn't collide with itself
 
@@ -90,7 +99,6 @@ public class UI_Handler : MonoBehaviour
             Debug.DrawRay(position, raycastDir * 1000, Color.red, 10f);
             if (Physics.Raycast(position, raycastDir, out hit))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 switch (hit.collider.gameObject.name)
                 {
                     case "DrillbitButton":

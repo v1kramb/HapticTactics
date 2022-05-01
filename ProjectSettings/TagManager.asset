@@ -6,6 +6,7 @@ TagManager:
   tags:
   - drillbit
   - drillingwall
+  - sparky
   layers:
   - Default
   - TransparentFX
