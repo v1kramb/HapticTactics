@@ -46,12 +46,15 @@ public class UI_Handler : MonoBehaviour
         {
             case "1/8":
                 transform.localScale = one_8_scale;
+                game.scale = 0;
                 break;
             case "1/4":
                 transform.localScale = one_4_scale;
+                game.scale = 1;
                 break;
             case "1/2":
                 transform.localScale = one_2_scale;
+                game.scale = 2;
                 break;
         }
 
@@ -65,8 +68,6 @@ public class UI_Handler : MonoBehaviour
         one_8.SetActive(!one_8.activeInHierarchy);
         one_4.SetActive(!one_4.activeInHierarchy);
         one_2.SetActive(!one_2.activeInHierarchy);
-
-
     }
     
     void Lube()
@@ -85,16 +86,14 @@ public class UI_Handler : MonoBehaviour
     }
 
     void Update()
-    {   
-        Vector3 raycastDir = -transform.forward;
-        Vector3 position = transform.position + (0.1f * raycastDir); // so it doesn't collide with itself
-
-        //Debug.DrawRay(position, raycastDir * 1000, Color.red);
-        //Debug.DrawRay(position, -raycastDir * 1000, Color.blue);
+    {
         string readSignal = game.inputStr;
         if (readSignal == "Double Click")
         {
             RaycastHit hit;
+
+            Vector3 raycastDir = -transform.forward;
+            Vector3 position = transform.position + (0.1f * raycastDir); // so it doesn't collide with itself
 
             Debug.DrawRay(position, raycastDir * 1000, Color.red, 10f);
             if (Physics.Raycast(position, raycastDir, out hit))

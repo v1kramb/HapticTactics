@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     float angleTolerance = 10.0f;
     public string inputStr;
     public bool lubed = false;
+
+    public float scale = 1; // 1/4 bit by default
+    
     // Start is called before the first frame update
     void Start()
     {

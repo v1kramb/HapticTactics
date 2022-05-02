@@ -72,6 +72,7 @@ public class CreateWall : MonoBehaviour
         plane.AddComponent<MeshFilter>();
         Mesh mesh = plane.GetComponent<MeshFilter>().mesh;
         mesh.name = "Plane Mesh " + index;
+        mesh.MarkDynamic(); // performance optimization
 
         // Generate mesh vertices
         Vector3[] vertices = new Vector3[(int) ((xSize * density + 1) * (ySize * density + 1))];

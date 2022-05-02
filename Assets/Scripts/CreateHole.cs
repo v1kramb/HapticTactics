@@ -7,20 +7,51 @@ public class CreateHole : MonoBehaviour
 {
     private GameObject wall;
     GameManager game;
+    private GameObject drillBit;
+
+    private float radiusReg;
+    private float radiusDiv;
+    private float radiusMult;
+
+    private float radius;
+    
+    // storing locally improves performance dramatically
+    private Mesh mesh;
+    private Color[] colors;
+    private int[] triangles;
 
     // Start is called before the first frame update
     void Start()
     {
         wall = GameObject.Find("Wall");
+        drillBit = GameObject.Find("Drillbit");
         game = FindObjectOfType<GameManager>();
-       // wall.GetComponent<MeshRenderer>().material.SetFloat("_Mode", 2);
+        // wall.GetComponent<MeshRenderer>().material.SetFloat("_Mode", 2);
 
+        mesh = GetComponent<MeshFilter>().mesh;
+        colors = mesh.colors;
+        triangles = mesh.triangles;
+
+        radiusReg = drillBit.GetComponent<CapsuleCollider>().radius * 0.002f * 0.25f; // need global transform
+        radiusDiv = radiusReg / 2f;
+        radiusMult = radiusReg * 2f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        switch(game.scale)
+        {
+            case 0:
+                radius = radiusDiv;
+                break;
+            case 1:
+                radius = radiusReg;
+                break;
+            case 2:
+                radius = radiusMult;
+                break;
+        }
     }
 
     // Optimized method to filter out particular indices from list (forbidden triangles from mesh's triangles)
@@ -52,35 +83,32 @@ public class CreateHole : MonoBehaviour
         values.RemoveRange(destStartIndex, sortedIndicies.Count * 3);
     }
 
-    void OnTriggerEnter(Collider other) // TODO: behavior for when the drill is drilling vs not drilling
+    void OnTriggerEnter(Collider other)
     {
-        // TODO: change offsetPosition for drillbit (?)
-        if (!game.holding)
+        if (other.gameObject.tag != "drillbit" || !game.holding)
             return;
-                //wall.GetComponent<MeshRenderer>().material.SetFloat("_Mode", 2);
 
         RaycastHit hit;
-
+        
         Vector3 raycastDir = -other.transform.forward;
         Vector3 norm1 = Vector3.Normalize(other.transform.up); // our two basis vectors
         Vector3 norm2 = Vector3.Normalize(other.transform.right);
 
         Vector3 offsetPosition = other.transform.position; // - (0.01f * raycastDir);
 
-        float radius = other.GetComponent<CapsuleCollider>().radius * 0.002f; // radius of colliding cylinder (*0.05 because of scaling in transform)
-        float planeSpacing = wall.GetComponent<CreateWall>().spacing * 2;
-
-        float triDistance = 0.2f / wall.GetComponent<CreateWall>().density;
+        //float radius = drillbitCollider.radius * 0.002f * 0.25f; // radius of colliding cylinder 
+        //float planeSpacing = wall.GetComponent<CreateWall>().spacing * 2;
+        //float triDistance = 0.2f / wall.GetComponent<CreateWall>().density;
 
         // cast several rays from points on the the cylinder's circle
         List<Vector3> positions = new List<Vector3>();
         positions.Add(offsetPosition);
 
-        /*Debug.Log(radius);
-        
-        for (float yMult = -radius; yMult < radius; yMult += 0.1f) // TODO: triDistance is probably broken lol
+        //Debug.Log(radius);
+
+        for (float yMult = -radius; yMult < radius; yMult += 0.0005f)
         {
-            for (float xMult = -radius; xMult < radius; xMult += 0.1f)
+            for (float xMult = -radius; xMult < radius; xMult += 0.0005f)
             {
                 Vector3 sum = (xMult * norm1) + (yMult * norm2);
 
@@ -89,7 +117,7 @@ public class CreateHole : MonoBehaviour
                     positions.Add(offsetPosition + sum);
                 }
             }
-        }*/
+        }
 
         // raycast from those points to the plane
         List<int> forbiddenTris = new List<int>(); // stores indices of vertices to be removed
@@ -97,10 +125,10 @@ public class CreateHole : MonoBehaviour
         foreach (Vector3 position in positions)
         {
             Ray ray = new Ray(position, raycastDir);
-            if (gameObject.name == "Plane 0")
-            {
-                Debug.DrawRay(position, raycastDir * planeSpacing, Color.red, 100.0f);
-            }
+            //if (gameObject.name == "Plane 0")
+            //{
+            //    Debug.DrawRay(position, raycastDir * planeSpacing, Color.red, 100.0f);
+            //}
 
             if (GetComponent<MeshCollider>().Raycast(ray, out hit, 100))
             {
@@ -117,21 +145,23 @@ public class CreateHole : MonoBehaviour
         }
 
         //// Destroy collider
-        Destroy(GetComponent<MeshCollider>());
+        //Destroy(GetComponent<MeshCollider>());
+        //Destroy(GetComponent<MeshRenderer>());
 
         // Store the mesh from MeshFilter
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        //Mesh mesh = GetComponent<MeshFilter>().mesh;
 
-        // Create temporary list for new triangles
-        List<int> newMesh = new List<int>();
-        newMesh.AddRange(mesh.triangles);
+        //// Create temporary list for new triangles
+        //List<int> newMesh = new List<int>();
+        //newMesh.AddRange(mesh.triangles);
 
-        // Efficient list removal (needed for dense meshes)
-        forbiddenTris.Sort();
-        FilterOutIndicies(newMesh, forbiddenTris);
+        //// Efficient list removal (needed for dense meshes)
+        //forbiddenTris.Sort();
+        //FilterOutIndicies(newMesh, forbiddenTris);
 
-        // Update mesh triangles
-        mesh.triangles = newMesh.ToArray();
+        //// Update mesh triangles
+        //mesh.triangles = newMesh.ToArray();
+
 
         //Instead of editing the mesh, make the color of the tris transparent
         //forbiddenTris contain indices corresponding to mesh.triangles, not mesh.vertices
@@ -154,25 +184,36 @@ public class CreateHole : MonoBehaviour
 
          mesh.RecalculateNormals();*/
 
-        Color[] colors = new Color[mesh.colors.Length];
-        for (int i = 0; i < mesh.colors.Length; i++)
-            colors[i] = mesh.colors[i];
-
+        // Create black etching on first plane
         Color temp = Color.black;
 
         if (gameObject.name == "Plane 0")
         {
             foreach (int idx in forbiddenTris)
             {
-                colors[mesh.triangles[idx]] = temp;
-                colors[mesh.triangles[idx + 1]] = temp;
-                colors[mesh.triangles[idx + 2]] = temp;
+                colors[triangles[idx]] = temp;
+                colors[triangles[idx + 1]] = temp;
+                colors[triangles[idx + 2]] = temp;
             }
         }
 
         mesh.colors = colors;
+        
+        // creates garbage triangles, better than removing them
+        foreach (int idx in forbiddenTris)
+        {
+            triangles[idx] = 0;
+            triangles[idx + 1] = 0;
+            triangles[idx + 2] = 0;
+        }
+
+        mesh.triangles = triangles;
+
+        //mesh.RecalculateNormals();
+        //mesh.RecalculateBounds();
 
         //// Add new collider
-        gameObject.AddComponent<MeshCollider>();
+        //gameObject.AddComponent<MeshRenderer>();
+        //gameObject.AddComponent<MeshCollider>();
     }
 }
