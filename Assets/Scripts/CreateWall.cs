@@ -111,13 +111,6 @@ public class CreateWall : MonoBehaviour
         Color[] colors = new Color[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
             colors[i] = newPlaneColor;
-
-        // Mark holes to drill
-        List<int> holesToDrill = new List<int>() { 60, 94, 119 };
-
-        foreach (int idx in holesToDrill)
-            colors[idx] = Color.red;
-
         mesh.colors = colors;
 
         // Add mesh renderer with material that makes triangle color visible
@@ -133,8 +126,13 @@ public class CreateWall : MonoBehaviour
         // Add mesh collider at the end and script to make holes in mesh
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
         plane.AddComponent<CreateHole>();
-       // plane.AddComponent<SparkTrigger>();
-       //plane.transform.Rotate(180.0f, 0.0f, 0.0f, Space.Self);
+
+        if (index == 0)
+        {
+            plane.AddComponent<MarkHoles>();
+        }
+        // plane.AddComponent<SparkTrigger>();
+        //plane.transform.Rotate(180.0f, 0.0f, 0.0f, Space.Self);
 
     }
 }
