@@ -21,7 +21,7 @@ public class MarkHoles : MonoBehaviour
     {
         currtime = Time.time;
 
-        mesh = GetComponent<MeshFilter>().mesh;
+        mesh = GetComponent<MeshFilter>().mesh; // attached to CreateHole mesh, GetComponent<MeshFilter>().mesh;
 
         colors = mesh.colors;
         vertices = mesh.vertices;

@@ -127,10 +127,10 @@ public class CreateWall : MonoBehaviour
         plane.AddComponent<MeshCollider>(); // must be added AFTER editing mesh
         plane.AddComponent<CreateHole>();
 
-        if (index == 0)
-        {
-            plane.AddComponent<MarkHoles>();
-        }
+        //if (index == 0)
+        //{
+        //    plane.AddComponent<MarkHoles>();
+        //}
         // plane.AddComponent<SparkTrigger>();
         //plane.transform.Rotate(180.0f, 0.0f, 0.0f, Space.Self);
 

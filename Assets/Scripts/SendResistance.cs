@@ -23,7 +23,7 @@ public class SendResistance : MonoBehaviour
         wall = GameObject.Find("Wall");
         currWall = 0;
         next_time = Time.time;
-        delay = 5;
+        delay = 2;
     }
 
     // Update is called once per frame
@@ -81,7 +81,7 @@ public class SendResistance : MonoBehaviour
 
                 if (planeIdx == 7)
                 {
-                    game.SendCommand("3\n");
+                    game.SendCommand("2\n");
                     game.holding = false;
                     
                     GetComponent<UI_Handler>().ResetLubeButton(); // resets game.lubed
